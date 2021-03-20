@@ -6,8 +6,8 @@
       <T>System.Object</T>
     </TN>
     <MS>
-      <S N="Name">HubSpotPS</S>
-      <Version N="Version">1.0.3</Version>
+      <S N="Name">QHubSpotPS</S>
+      <Version N="Version">1.0.3.0</Version>
       <S N="Type">Module</S>
       <S N="Description">A PowerShell module that makes interfacing with HubSpot a little easier</S>
       <S N="Author">Michael Dejulia</S>
@@ -187,8 +187,8 @@
           <S N="tags">HubSpot HubSpotPS HubSpotApi HubSpotCrm Marketing CRM Events PSModule PSFunction_Get-HSContact PSCommand_Get-HSContact PSFunction_Get-HSContactList PSCommand_Get-HSContactList PSFunction_Get-HSDeal PSCommand_Get-HSDeal PSFunction_Get-HSDealAssociationList PSCommand_Get-HSDealAssociationList PSFunction_Get-HSDealList PSCommand_Get-HSDealList PSFunction_Get-HSGroup PSCommand_Get-HSGroup PSFunction_Get-HSGroupList PSCommand_Get-HSGroupList PSFunction_Get-HSOwnerList PSCommand_Get-HSOwnerList PSFunction_Get-HSPropertyList PSCommand_Get-HSPropertyList PSFunction_Get-HSSession PSCommand_Get-HSSession PSFunction_Invoke-HSRestMethod PSCommand_Invoke-HSRestMethod PSFunction_New-HSAccountToken PSCommand_New-HSAccountToken PSFunction_New-HSContact PSCommand_New-HSContact PSFunction_New-HSContactBatch PSCommand_New-HSContactBatch PSFunction_New-HSDeal PSCommand_New-HSDeal PSFunction_New-HSDealAssociation PSCommand_New-HSDealAssociation PSFunction_New-HSDealBatch PSCommand_New-HSDealBatch PSFunction_New-HSProperty PSCommand_New-HSProperty PSFunction_New-HSSession PSCommand_New-HSSession PSFunction_Remove-HSContact PSCommand_Remove-HSContact PSFunction_Remove-HSDeal PSCommand_Remove-HSDeal PSFunction_Remove-HSSession PSCommand_Remove-HSSession PSFunction_Save-HSSession PSCommand_Save-HSSession PSFunction_Update-HSContact PSCommand_Update-HSContact PSFunction_Update-HSDeal PSCommand_Update-HSDeal PSFunction_Update-HSSession PSCommand_Update-HSSession PSIncludes_Function</S>
           <S N="developmentDependency">False</S>
           <S N="updated">2021-02-09T21:39:27Z</S>
-          <S N="NormalizedVersion">1.0.3</S>
-          <S N="Authors">Michael Dejulia</S>
+          <S N="NormalizedVersion">1.0.3.0</S>
+          <S N="Authors">Michael Dejulia, Johnny Josefsson</S>
           <S N="IsPrerelease">false</S>
           <S N="ItemType">Module</S>
           <S N="FileList">HubSpotPS.nuspec|HubSpotPS.psd1|HubSpotPS.psm1</S>
@@ -196,7 +196,7 @@
           <S N="PowerShellVersion">5.0</S>
         </MS>
       </Obj>
-      <S N="InstalledLocation">C:\Program Files\WindowsPowerShell\Modules\HubSpotPS\1.0.3</S>
+      <S N="InstalledLocation">C:\Program Files\WindowsPowerShell\Modules\QHubSpotPS\1.0.3</S>
     </MS>
   </Obj>
 </Objs>
