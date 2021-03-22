@@ -10,3 +10,10 @@ Download files
 Do a "drop in" replacement of the files
 
 Load the module and use the new functions
+
+Supports extra
+- HSProduct
+- HSProductList
+- HSCompany
+- HSCompanyList
+- 
