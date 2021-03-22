@@ -69,17 +69,18 @@ RequiredAssemblies = 'System.IO.Compression.FileSystem.dll'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'Get-HSProduct', 'Get-HSProductList',
-			   'Get-HSContact', 'Get-HSContactList',
-			   'Get-HSDeal', 
-               'Get-HSDealAssociationList', 'Get-HSDealList', 'Get-HSGroup', 
-               'Get-HSGroupList', 'Get-HSOwnerList', 'Get-HSPropertyList', 
-               'Get-HSSession', 'Invoke-HSRestMethod', 'New-HSAccountToken', 
-               'New-HSContact', 'New-HSContactBatch', 'New-HSDeal', 
-               'New-HSDealAssociation', 'New-HSDealBatch', 'New-HSProperty', 
-               'New-HSSession', 'Remove-HSContact', 'Remove-HSDeal', 
-               'Remove-HSSession', 'Save-HSSession', 'Update-HSContact', 
-               'Update-HSDeal', 'Update-HSSession'
+FunctionsToExport = 'Get-HSCompany', 'Get-HSCompanyList',
+					'Get-HSProduct', 'Get-HSProductList',
+					'Get-HSContact', 'Get-HSContactList',
+					'Get-HSDeal', 'Get-HSDealList', 'Get-HSDealAssociationList', 
+					'Get-HSGroup', 'Get-HSGroupList',
+					'Get-HSOwnerList', 'Get-HSPropertyList', 'Get-HSSession',
+					'Invoke-HSRestMethod',
+					'New-HSAccountToken', 'New-HSContact', 'New-HSContactBatch', 'New-HSDeal',
+					'New-HSDealAssociation', 'New-HSDealBatch', 'New-HSProperty', 'New-HSSession',
+					'Remove-HSContact', 'Remove-HSDeal', 'Remove-HSSession',
+					'Save-HSSession',
+					'Update-HSContact', 'Update-HSDeal', 'Update-HSSession'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
