@@ -6,7 +6,7 @@
       <T>System.Object</T>
     </TN>
     <MS>
-      <S N="Name">HubSpotPS</S>
+      <S N="Name">QHubSpotPS</S>
       <Version N="Version">1.0.3</Version>
       <S N="Type">Module</S>
       <S N="Description">A PowerShell module that makes interfacing with HubSpot a little easier</S>
