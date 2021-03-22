@@ -1,5 +1,5 @@
 $Script:PSModuleRoot = $PSScriptRoot
-$Script:ModuleName = "HubSpotPS"
+$Script:ModuleName = "QHubSpotPS"
 $Script:LSAppDataPath = [Environment]::GetFolderPath('ApplicationData')
 $Script:ModuleDataRoot = (Join-Path -Path $Script:LSAppDataPath -ChildPath $Script:ModuleName)
 $Script:ModuleDataPath = (Join-Path -Path $Script:ModuleDataRoot -ChildPath "ModuleData.json")
