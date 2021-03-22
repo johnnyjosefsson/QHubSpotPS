@@ -1,5 +1,5 @@
 $Script:PSModuleRoot = $PSScriptRoot
-$Script:ModuleName = "QHubSpotPS"
+$Script:ModuleName = "HubSpotPS"
 $Script:LSAppDataPath = [Environment]::GetFolderPath('ApplicationData')
 $Script:ModuleDataRoot = (Join-Path -Path $Script:LSAppDataPath -ChildPath $Script:ModuleName)
 $Script:ModuleDataPath = (Join-Path -Path $Script:ModuleDataRoot -ChildPath "ModuleData.json")
@@ -95,6 +95,14 @@ function Get-HSApiEndpoint
     {
         Switch ($ApiType)
         {
+            'crm-companies'
+            {
+                return 'crm/v3/objects/companies'
+            }
+            'crm-companyId'
+            {
+                return 'crm/v3/objects/companies/{0}'
+            }			
             'crm-products'
             {
                 return 'crm/v3/objects/products'
@@ -398,6 +406,212 @@ Function Unprotect-HSSecurePersonalAccessToken
 }
 
 # Imported from [D:\a\1\s\HubSpotPS\Public]
+# Get-HSCompany.ps1
+function Get-HSCompany
+{
+    <#
+    .SYNOPSIS
+
+    Gets a HubSpot company.
+
+    .DESCRIPTION
+
+    Gets a HubSpot company by id.
+    Identify the company id with Get-HSCompanyList.
+
+    .PARAMETER Session
+
+    HubSpot session, created by New-HSSession.
+
+    .PARAMETER CompanyId
+
+    The id of the Company.
+
+    .INPUTS
+
+    None, does not support pipeline.
+
+    .OUTPUTS
+
+    PSObject, HS Company.
+
+    .EXAMPLE
+
+    Returns a Company with the id of 7.
+
+    Get-HSCompany -Session 'mySession' -CompanyId '7'
+
+    .LINK
+
+    https://developers.hubspot.com/docs/api/crm/Companys
+    #>
+    [CmdletBinding()]
+    Param
+    (
+        [Parameter(Mandatory)]
+        [object]
+        $Session, 
+
+        [Parameter(Mandatory)]
+        [string]
+        $CompanyId
+    )
+
+    begin
+    {
+        $currentSession = $Session | Get-HSSession
+        If ($currentSession)
+        {
+            $instance = $currentSession.Instance
+            $personalaccesstoken = $currentSession.PersonalAccessToken
+            $proxy = $currentSession.Proxy
+            $proxyCredential = $currentSession.ProxyCredential
+        }
+    }
+        
+    process
+    {
+        $apiEndpoint = (Get-HSApiEndpoint -ApiType 'crm-companyId') -f $CompanyId
+        $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken
+        $setAPUriSplat = @{
+            Instance    = $instance
+            ApiEndpoint = $apiEndpoint
+            Query       = $queryParameters
+        }
+        [uri] $uri = Set-HSUri @setAPUriSplat
+        $invokeAPRestMethodSplat = @{
+            Method          = 'GET'
+            Uri             = $uri
+            ContentType     = 'application/json'
+            Proxy           = $proxy
+            ProxyCredential = $proxyCredential
+        }
+        $results = Invoke-HSRestMethod @invokeAPRestMethodSplat 
+        If ($results)
+        {
+            $results
+        }
+    }
+    
+    end
+    {
+    }
+}
+# Get-HSCompanyList.ps1
+function Get-HSCompanyList
+{
+    <#
+    .SYNOPSIS
+
+    Gets a list of HubSpot Company.
+
+    .DESCRIPTION
+
+    Gets a list of HubSpot Company.
+
+    .PARAMETER Session
+
+    HubSpot session, created by New-HSSession.
+
+    .PARAMETER Limit
+
+    The maximum number of results to display per page. Defaults to 10.
+
+    .PARAMETER After
+
+    The paging cursor token of the last successfully read resource will be returned as the paging.next.after JSON property of a paged response containing more results.
+
+    .PARAMETER Properties
+
+    A comma separated list of the properties to be returned in the response. If any of the specified properties are not present on the requested object(s), they will be ignored.
+
+    .INPUTS
+
+    None, does not support pipeline.
+
+    .OUTPUTS
+
+    PSObject, List of HubSpot Company.
+
+    .EXAMPLE
+
+    Returns a list of HubSpot Companys for 'mySession'
+
+    Get-HSCompanyList -Session 'mySession'
+
+    .LINK
+
+    https://developers.hubspot.com/docs/api/crm/Companys
+    #>
+    [CmdletBinding()]
+    Param
+    (
+        [Parameter(Mandatory)]
+        [object]
+        $Session,
+
+        [Parameter()]
+        [int]
+        $Limit = 10,
+
+        [Parameter()]
+        [string]
+        $After,
+
+        [Parameter()]
+        [string[]]
+        $Properties
+    )
+
+    begin
+    {
+        $currentSession = $Session | Get-HSSession
+        If ($currentSession)
+        {
+            $instance = $currentSession.Instance
+            $personalaccesstoken = $currentSession.PersonalAccessToken
+            $proxy = $currentSession.Proxy
+            $proxyCredential = $currentSession.ProxyCredential
+        }
+    }
+        
+    process
+    {
+        $apiEndpoint = Get-HSApiEndpoint -ApiType 'crm-companies'
+        $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken -SplitProperties
+        $setAPUriSplat = @{
+            Instance    = $instance
+            ApiEndpoint = $apiEndpoint
+            Query       = $queryParameters
+        }
+        [uri] $uri = Set-HSUri @setAPUriSplat
+        $invokeAPRestMethodSplat = @{
+            Method          = 'GET'
+            Uri             = $uri
+            ContentType     = 'application/json'
+            Proxy           = $proxy
+            ProxyCredential = $proxyCredential
+        }
+        $results = Invoke-HSRestMethod @invokeAPRestMethodSplat 
+        if ($results.paging.next.after)
+        {
+            $results.results
+            $null = $PSBoundParameters.Remove('After')
+            Get-HSCompanyList @PSBoundParameters -After $results.paging.next.after
+        }
+        elseIf ($results.results)
+        {
+            $results.results
+        }
+    }
+    
+    end
+    {
+    }
+}
+
+
+# Imported from [D:\a\1\s\HubSpotPS\Public]
 # Get-HSProduct.ps1
 function Get-HSProduct
 {
@@ -601,6 +815,7 @@ function Get-HSProductList
     {
     }
 }
+
 # Imported from [D:\a\1\s\HubSpotPS\Public]
 # Get-HSContact.ps1
 function Get-HSContact
