@@ -11,9 +11,11 @@ Do a "drop in" replacement of the files
 
 Load the module and use the new functions
 
-Supports extra
+Extended with support for these objects and commands:
 - HSProduct
 - HSProductList
 - HSCompany
 - HSCompanyList
-- 
+- HSLineItem
+- HSLineItemList
+- HSLineItemAssociation
