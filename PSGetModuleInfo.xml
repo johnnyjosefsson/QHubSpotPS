@@ -70,6 +70,8 @@
                 <S>Get-HSDeal</S>
                 <S>Get-HSDealAssociationList</S>
                 <S>Get-HSDealList</S>
+                <S>Get-HSLineItem</S>
+                <S>Get-HSLineItemList</S>
                 <S>Get-HSGroup</S>
                 <S>Get-HSGroupList</S>
                 <S>Get-HSOwnerList</S>
@@ -82,14 +84,17 @@
                 <S>New-HSDeal</S>
                 <S>New-HSDealAssociation</S>
                 <S>New-HSDealBatch</S>
+                <S>New-HSLineItem</S>
                 <S>New-HSProperty</S>
                 <S>New-HSSession</S>
                 <S>Remove-HSContact</S>
                 <S>Remove-HSDeal</S>
+                <S>Remove-HSLineItem</S>
                 <S>Remove-HSSession</S>
                 <S>Save-HSSession</S>
                 <S>Update-HSContact</S>
                 <S>Update-HSDeal</S>
+                <S>Update-HSLineItem</S>
                 <S>Update-HSSession</S>
               </LST>
             </Obj>
@@ -115,6 +120,9 @@
                 <S>Get-HSDeal</S>
                 <S>Get-HSDealAssociationList</S>
                 <S>Get-HSDealList</S>
+                <S>Get-HSLineItem</S>
+                <S>Get-HSLineItemList</S>
+                <S>Get-HSLineItemAssociationList</S>
                 <S>Get-HSGroup</S>
                 <S>Get-HSGroupList</S>
                 <S>Get-HSOwnerList</S>
@@ -127,14 +135,18 @@
                 <S>New-HSDeal</S>
                 <S>New-HSDealAssociation</S>
                 <S>New-HSDealBatch</S>
+                <S>New-HSLineItem</S>
+                <S>New-HSLineItemAssociation</S>
                 <S>New-HSProperty</S>
                 <S>New-HSSession</S>
                 <S>Remove-HSContact</S>
                 <S>Remove-HSDeal</S>
+                <S>Remove-HSLineItem</S>
                 <S>Remove-HSSession</S>
                 <S>Save-HSSession</S>
                 <S>Update-HSContact</S>
                 <S>Update-HSDeal</S>
+                <S>Update-HSLineItem</S>
                 <S>Update-HSSession</S>
               </LST>
             </Obj>

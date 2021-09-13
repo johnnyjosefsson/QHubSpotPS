@@ -21,7 +21,7 @@ ModuleVersion = '1.0.3'
 GUID = '0708ed9a-1a3e-412b-bcd4-ee7bb51549e3'
 
 # Author of this module
-Author = 'Michael Dejulia'
+Author = 'Michael Dejulia, Johnny Josefsson'
 
 # Company or vendor of this module
 CompanyName = ''
@@ -70,17 +70,27 @@ RequiredAssemblies = 'System.IO.Compression.FileSystem.dll'
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = 'Get-HSCompany', 'Get-HSCompanyList',
-					'Get-HSProduct', 'Get-HSProductList',
 					'Get-HSContact', 'Get-HSContactList',
+					'Get-HSProduct', 'Get-HSProductList',
 					'Get-HSDeal', 'Get-HSDealList', 'Get-HSDealAssociationList', 
-					'Get-HSGroup', 'Get-HSGroupList',
+                    'Get-HSLineItem', 'Get-HSLineItemList', 'Get-HSLineItemAssociationList',
+                    'Get-HSGroup', 'Get-HSGroupList',
 					'Get-HSOwnerList', 'Get-HSPropertyList', 'Get-HSSession',
 					'Invoke-HSRestMethod',
-					'New-HSAccountToken', 'New-HSContact', 'New-HSContactBatch', 'New-HSDeal',
-					'New-HSDealAssociation', 'New-HSDealBatch', 'New-HSProperty', 'New-HSSession',
-					'Remove-HSContact', 'Remove-HSDeal', 'Remove-HSSession',
+					'New-HSContact', 'New-HSContactBatch',
+                    'New-HSDeal', 'New-HSDealAssociation', 'New-HSDealBatch',
+                    'New-HSLineItem', 'New-HSLineItemAssociation',
+                    'New-HSProperty', 
+                    'New-HSAccountToken', 'New-HSSession',
+					'Remove-HSContact',
+                    'Remove-HSDeal',
+                    'Remove-HSLineItem', 
+                    'Remove-HSSession',
 					'Save-HSSession',
-					'Update-HSContact', 'Update-HSDeal', 'Update-HSSession'
+					'Update-HSContact',
+                    'Update-HSDeal',
+                    'Update-HSLineItem',
+                    'Update-HSSession'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()

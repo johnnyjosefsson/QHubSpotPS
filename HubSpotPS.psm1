@@ -147,6 +147,22 @@ function Get-HSApiEndpoint
             {
                 return 'crm/v3/objects/deals/{0}/associations/{1}/{2}/{3}'
             }
+            'crm-lineitems'
+            {
+                return 'crm/v3/objects/line_items'
+            }
+            'crm-lineitemId'
+            {
+                return 'crm/v3/objects/line_items/{0}'
+            }
+            'crm-lineitems-associations'
+            {
+                return 'crm/v3/objects/line_items/{0}/associations/{1}'
+            }
+            'crm-lineitems-associationType'
+            {
+                return 'crm/v3/objects/line_items/{0}/associations/{1}/{2}/{3}'
+            }            
             'crm-owners'
             {
                 return 'crm/v3/owners'
@@ -1064,7 +1080,7 @@ function Get-HSDeal
     (
         [Parameter(Mandatory)]
         [object]
-        $Session,
+        $Session, 
 
         [Parameter(Mandatory)]
         [string]
@@ -1085,7 +1101,7 @@ function Get-HSDeal
         
     process
     {
-        $apiEndpoint = (Get-HSApiEndpoint -ApiType 'crm-dealId') -f $ObjectType, $DealId
+        $apiEndpoint = (Get-HSApiEndpoint -ApiType 'crm-dealId') -f $DealId
         $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken
         $setAPUriSplat = @{
             Instance    = $instance
@@ -1101,9 +1117,9 @@ function Get-HSDeal
             ProxyCredential = $proxyCredential
         }
         $results = Invoke-HSRestMethod @invokeAPRestMethodSplat 
-        If ($results.results)
+        If ($results)
         {
-            $results.results
+            $results
         }
     }
     
@@ -1345,6 +1361,209 @@ function Get-HSDealList
             $results.results
             $null = $PSBoundParameters.Remove('After')
             Get-HSDealList @PSBoundParameters -After $results.paging.next.after
+        }
+        elseIf ($results.results)
+        {
+            $results.results
+        }
+    }
+    
+    end
+    {
+    }
+}
+# Get-HSLineItem.ps1
+function Get-HSLineItem
+{
+    <#
+    .SYNOPSIS
+
+    Gets a HubSpot line items.
+
+    .DESCRIPTION
+
+    Gets a HubSpot line items by name.
+    Identify the line items name with Get-HSLineItemList.
+
+    .PARAMETER Session
+
+    HubSpot session, created by New-HSSession.
+
+    .PARAMETER LineItemId
+
+    The name of the line items.
+
+    .INPUTS
+
+    None, does not support pipeline.
+
+    .OUTPUTS
+
+    PSObject, HS line items.
+
+    .EXAMPLE
+
+    Returns a line items with the id of 7.
+
+    Get-HSLinteItem -Session 'mySession' -LineItemId '7'
+
+    .LINK
+
+    https://developers.hubspot.com/docs/api/crm/line-items
+    #>
+    [CmdletBinding()]
+    Param
+    (
+        [Parameter(Mandatory)]
+        [object]
+        $Session, 
+
+        [Parameter(Mandatory)]
+        [string]
+        $LineItemId
+    )
+
+    begin
+    {
+        $currentSession = $Session | Get-HSSession
+        If ($currentSession)
+        {
+            $instance = $currentSession.Instance
+            $personalaccesstoken = $currentSession.PersonalAccessToken
+            $proxy = $currentSession.Proxy
+            $proxyCredential = $currentSession.ProxyCredential
+        }
+    }
+        
+    process
+    {
+        $apiEndpoint = (Get-HSApiEndpoint -ApiType 'crm-lineitemId') -f $LineItemId
+        $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken
+        $setAPUriSplat = @{
+            Instance    = $instance
+            ApiEndpoint = $apiEndpoint
+            Query       = $queryParameters
+        }
+        [uri] $uri = Set-HSUri @setAPUriSplat
+        $invokeAPRestMethodSplat = @{
+            Method          = 'GET'
+            Uri             = $uri
+            ContentType     = 'application/json'
+            Proxy           = $proxy
+            ProxyCredential = $proxyCredential
+        }
+        $results = Invoke-HSRestMethod @invokeAPRestMethodSplat 
+        If ($results)
+        {
+            $results
+        }
+    }
+    
+    end
+    {
+    }
+}
+#Get-HSLineItemList.ps1
+function Get-HSLineItemList
+{
+    <#
+    .SYNOPSIS
+
+    Gets a list of HubSpot line items.
+
+    .DESCRIPTION
+
+    Gets a list of HubSpot line items.
+
+    .PARAMETER Session
+
+    HubSpot session, created by New-HSSession.
+
+    .PARAMETER Limit
+
+    The maximum number of results to display per page. Defaults to 10.
+
+    .PARAMETER After
+
+    The paging cursor token of the last successfully read resource will be returned as the paging.next.after JSON property of a paged response containing more results.
+
+    .PARAMETER Properties
+
+    A comma separated list of the properties to be returned in the response. If any of the specified properties are not present on the requested object(s), they will be ignored.
+
+    .INPUTS
+
+    None, does not support pipeline.
+
+    .OUTPUTS
+
+    PSObject, List of HubSpot line items.
+
+    .EXAMPLE
+
+    Returns a list of HubSpot line items for 'mySession'
+
+    Get-HSLineItemList -Session 'mySession'
+
+    .LINK
+
+    https://developers.hubspot.com/docs/api/crm/line-items
+    #>
+    [CmdletBinding()]
+    Param
+    (
+        [Parameter(Mandatory)]
+        [object]
+        $Session,
+
+        [Parameter()]
+        [int]
+        $Limit = 10,
+
+        [Parameter()]
+        [string]
+        $After,
+
+        [Parameter()]
+        [string[]]
+        $Properties
+    )
+
+    begin
+    {
+        $currentSession = $Session | Get-HSSession
+        If ($currentSession)
+        {
+            $instance = $currentSession.Instance
+            $personalaccesstoken = $currentSession.PersonalAccessToken
+            $proxy = $currentSession.Proxy
+            $proxyCredential = $currentSession.ProxyCredential
+        }
+    }
+        
+    process
+    {
+        $apiEndpoint = Get-HSApiEndpoint -ApiType 'crm-lineitems'
+        $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken -SplitProperties
+        $setAPUriSplat = @{
+            Instance    = $instance
+            ApiEndpoint = $apiEndpoint
+            Query       = $queryParameters
+        }
+        [uri] $uri = Set-HSUri @setAPUriSplat
+        $invokeAPRestMethodSplat = @{
+            Method          = 'GET'
+            Uri             = $uri
+            ContentType     = 'application/json'
+            Proxy           = $proxy
+            ProxyCredential = $proxyCredential
+        }
+        $results = Invoke-HSRestMethod @invokeAPRestMethodSplat 
+        if ($results.paging.next.after)
+        {
+            $results.results
+            $null = $PSBoundParameters.Remove('After')
+            Get-HSLineItemList @PSBoundParameters -After $results.paging.next.after
         }
         elseIf ($results.results)
         {
@@ -2817,6 +3036,235 @@ function New-HSDealBatch
     {
     }
 }
+# New-HSLineItem.ps1
+function New-HSLineItem
+{
+    <#
+    .SYNOPSIS
+
+    Creates a HubSpot line item.
+
+    .DESCRIPTION
+    
+    Creates a line items with the given properties and returns a copy of the object, including the id.
+
+    .PARAMETER Session
+
+    HubSpot session, created by New-HSSession.
+
+    .PARAMETER Properties
+
+    The property object used to update the line item.
+
+    .INPUTS
+
+    None, does not support pipeline.
+
+    .OUTPUTS
+
+    PSObject, HS line item.
+
+    .EXAMPLE
+
+    Creates a line item with the provided properties.
+
+    $props = @{
+        "name": "1 year implementation consultation",
+        "hs_product_id": "191902",
+        "hs_recurring_billing_period": "24",
+        "recurringbillingfrequency": "monthly",
+        "quantity": "2",
+        "price": "6000.00"
+    }
+    New-HSLineItem -Session 'mySession' -Properties $props
+
+    .LINK
+
+    https://developers.hubspot.com/docs/api/crm/line-items
+    #>
+    [CmdletBinding()]
+    Param
+    (
+        [Parameter(Mandatory)]
+        [object]
+        $Session,
+
+        [Parameter(Mandatory)]
+        [Object]
+        $Properties
+    )
+
+    begin
+    {
+        $currentSession = $Session | Get-HSSession
+        If ($currentSession)
+        {
+            $instance = $currentSession.Instance
+            $personalaccesstoken = $currentSession.PersonalAccessToken
+            $proxy = $currentSession.Proxy
+            $proxyCredential = $currentSession.ProxyCredential
+        }
+    }
+        
+    process
+    {
+        $body = @{
+            properties = $Properties
+        }
+        $apiEndpoint = Get-HSApiEndpoint -ApiType 'crm-lineitems'
+        $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken
+        $setAPUriSplat = @{
+            Instance    = $instance
+            ApiEndpoint = $apiEndpoint
+            Query       = $queryParameters
+        }
+        [uri] $uri = Set-HSUri @setAPUriSplat
+        $invokeAPRestMethodSplat = @{
+            Method          = 'POST'
+            Uri             = $uri
+            Body            = $body
+            FormatBody      = $true
+            ContentType     = 'application/json'
+            Proxy           = $proxy
+            ProxyCredential = $proxyCredential
+        }
+        $results = Invoke-HSRestMethod @invokeAPRestMethodSplat 
+        If ($results)
+        {
+            $results
+        }
+    }
+    
+    end
+    {
+    }
+}
+# New-HSLineItemAssociation.ps1
+function New-HSLineItemAssociation
+{
+    <#
+    .SYNOPSIS
+
+    Creates a HubSpot line item.
+
+    .DESCRIPTION
+    
+    Associate a line item with another object [DEAL only] using the line items id.
+    Identify the line item name with Get-HSLineItemList.
+
+    .PARAMETER Session
+
+    HubSpot session, created by New-HSSession.
+
+    .PARAMETER LineItemId
+
+    The name of the line item.
+
+    .PARAMETER ToObjectType
+
+    CRM objects are defined by a primary type and a set of properties. Each type has a unique set of standard properties, represented by a map of name-value pairs.
+    - Deals
+    - Contacts [NOT supported for Line Item]
+    - Companies [NOT supported for Line Item]
+    - Tickets [NOT supported for Line Item]
+
+    .PARAMETER ToObjectId
+
+    The target object id.
+
+    .PARAMETER AssociationType
+
+    Associations represent the relationships between objects in the HubSpot CRM.
+    The CRM associations endpoints help manage and define those relationships, allowing you to create a more holistic picture of your customer interactions and improving your ability to market, sell, and serve.
+
+    .INPUTS
+
+    None, does not support pipeline.
+
+    .OUTPUTS
+
+    PSObject, HS deal.
+
+    .EXAMPLE
+
+    Associate a deal with another object [DEAL only] using the line item id.
+
+    .LINK
+
+    https://developers.hubspot.com/docs/api/crm/line-items
+    #>
+    [CmdletBinding()]
+    Param
+    (
+        [Parameter(Mandatory)]
+        [object]
+        $Session,
+
+        [Parameter(Mandatory)]
+        [string]
+        $LineItemId,
+
+        [Parameter(Mandatory)]
+        #[ValidateSet('Contacts', 'Companies', 'Deals', 'Tickets')]
+        [ValidateSet('Deals')]
+        [string]
+        $ToObjectType,
+
+        [Parameter(Mandatory)]
+        [string]
+        $ToObjectId,
+        
+        [Parameter(Mandatory)]
+        [ValidateSet(
+            'Deal_to_line_item',
+            'Line_item_to_deal'
+        )]
+        [AssociationType]
+        $AssociationType
+        
+    )
+
+    begin
+    {
+        $currentSession = $Session | Get-HSSession
+        If ($currentSession)
+        {
+            $instance = $currentSession.Instance
+            $personalaccesstoken = $currentSession.PersonalAccessToken
+            $proxy = $currentSession.Proxy
+            $proxyCredential = $currentSession.ProxyCredential
+        }
+    }
+        
+    process
+    {
+        $PSBoundParameters.AssociationType = [AssociationType]::$AssociationType.value__
+        $apiEndpoint = (Get-HSApiEndpoint -ApiType 'crm-lineitems-associationType') -f $DealId, $ToObjectType, $ToObjectId, $AssociationType
+        $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken
+        $setAPUriSplat = @{
+            Instance    = $instance
+            ApiEndpoint = $apiEndpoint
+            Query       = $queryParameters
+        }
+        [uri] $uri = Set-HSUri @setAPUriSplat
+        $invokeAPRestMethodSplat = @{
+            Method          = 'PUT'
+            Uri             = $uri
+            ContentType     = 'application/json'
+            Proxy           = $proxy
+            ProxyCredential = $proxyCredential
+        }
+        $results = Invoke-HSRestMethod @invokeAPRestMethodSplat 
+        If ($results)
+        {
+            $results
+        }
+    }
+    
+    end
+    {
+    }
+}
 # New-HSProperty.ps1
 function New-HSProperty
 {
@@ -3302,6 +3750,97 @@ function Remove-HSDeal
     {
     }
 }
+# Remove-HSLineItem.ps1
+function Remove-HSLineItem
+{
+    <#
+    .SYNOPSIS
+
+    Removes a HubSpot line item.
+
+    .DESCRIPTION
+
+    Moves a deal identified by LineItemId to the recycling bin.
+    Identify the line item id with Get-HSLineItemList.
+
+    .PARAMETER Session
+
+    HubSpot session, created by New-HSSession.
+
+    .PARAMETER DealId
+
+    The id of the line item.
+
+    .INPUTS
+
+    None, does not support pipeline.
+
+    .OUTPUTS
+
+    PSObject, HS Line Item.
+
+    .EXAMPLE
+
+    Removes a line item with the id of 7.
+
+    Remove-HSLineItem -Session 'mySession' -LineItemId '7'
+
+    .LINK
+
+    https://developers.hubspot.com/docs/api/crm/line-item
+    #>
+    [CmdletBinding()]
+    Param
+    (
+        [Parameter(Mandatory)]
+        [object]
+        $Session, 
+
+        [Parameter(Mandatory)]
+        [string]
+        $LineItemId
+    )
+
+    begin
+    {
+        $currentSession = $Session | Get-HSSession
+        If ($currentSession)
+        {
+            $instance = $currentSession.Instance
+            $personalaccesstoken = $currentSession.PersonalAccessToken
+            $proxy = $currentSession.Proxy
+            $proxyCredential = $currentSession.ProxyCredential
+        }
+    }
+        
+    process
+    {
+        $apiEndpoint = (Get-HSApiEndpoint -ApiType 'crm-lineitemId') -f $LineItemId
+        $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken
+        $setAPUriSplat = @{
+            Instance    = $instance
+            ApiEndpoint = $apiEndpoint
+            Query       = $queryParameters
+        }
+        [uri] $uri = Set-HSUri @setAPUriSplat
+        $invokeAPRestMethodSplat = @{
+            Method          = 'DELETE'
+            Uri             = $uri
+            ContentType     = 'application/json'
+            Proxy           = $proxy
+            ProxyCredential = $proxyCredential
+        }
+        $results = Invoke-HSRestMethod @invokeAPRestMethodSplat 
+        If ($results)
+        {
+            $results
+        }
+    }
+    
+    end
+    {
+    }
+}
 # Remove-HSSession.ps1
 Function Remove-HSSession
 {
@@ -3694,6 +4233,121 @@ function Update-HSDeal
             properties = $Properties
         }
         $apiEndpoint = (Get-HSApiEndpoint -ApiType 'crm-dealId') -f $DealId
+        $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken
+        $setAPUriSplat = @{
+            Instance    = $instance
+            ApiEndpoint = $apiEndpoint
+            Query       = $queryParameters
+        }
+        [uri] $uri = Set-HSUri @setAPUriSplat
+        $invokeAPRestMethodSplat = @{
+            Method          = 'PATCH'
+            Uri             = $uri
+            Body            = $body
+            FormatBody      = $true
+            ContentType     = 'application/json'
+            Proxy           = $proxy
+            ProxyCredential = $proxyCredential
+        }
+        $results = Invoke-HSRestMethod @invokeAPRestMethodSplat 
+        If ($results)
+        {
+            $results
+        }
+    }
+    
+    end
+    {
+    }
+}
+# Update-HSLineItem.ps1
+function Update-HSLineItem
+{
+    <#
+    .SYNOPSIS
+
+    Updates a HubSpot line item to the data provided by line item id.
+
+    .DESCRIPTION
+    
+    Perform a partial update of an Object identified by LineItemId. 
+    Identify the LineItemId with Get-HSLineItemList.
+    Provided property values will be overwritten. 
+    Read-only and non-existent properties will be ignored. 
+    Properties values can be cleared by passing an empty string.
+
+    .PARAMETER Session
+
+    HubSpot session, created by New-HSSession.
+
+    .PARAMETER LineItemId
+
+    The id of the line item.
+
+    .PARAMETER Properties
+
+    The property object used to update the line item.
+
+    .INPUTS
+
+    None, does not support pipeline.
+
+    .OUTPUTS
+
+    PSObject, HS line item.
+
+    .EXAMPLE
+
+    Updates the line item properties for the line item with the id of 7.
+
+    $props = @{
+        "name": "1 year implementation consultation",
+        "hs_product_id": "191902",
+        "hs_recurring_billing_period": "24",
+        "recurringbillingfrequency": "monthly",
+        "quantity": "2",
+        "price": "6000.00"
+    }
+    Update-HSLineItem -Session 'mySession' -LineItemId '7' -Properties $props
+
+    .LINK
+
+    https://developers.hubspot.com/docs/api/crm/line-items
+    #>
+    [CmdletBinding()]
+    Param
+    (
+        [Parameter(Mandatory)]
+        [object]
+        $Session, 
+
+        [Parameter(Mandatory)]
+        [string]
+        $LineItemId,
+
+        [Parameter(Mandatory)]
+        [Object]
+        $Properties
+    )
+
+    begin
+    {
+        $currentSession = $Session | Get-HSSession
+        If ($currentSession)
+        {
+            $instance = $currentSession.Instance
+            $personalaccesstoken = $currentSession.PersonalAccessToken
+            $proxy = $currentSession.Proxy
+            $proxyCredential = $currentSession.ProxyCredential
+        }
+    }
+        
+    process
+    {
+        $body = @{
+            properties = $Properties
+        }
+        $apiEndpoint = (Get-HSApiEndpoint -ApiType 'crm-lineitemId') -f $DealId
         $queryParameters = Set-HSQueryParameters -InputObject $PSBoundParameters -PersonalAccessToken $personalaccesstoken
         $setAPUriSplat = @{
             Instance    = $instance
